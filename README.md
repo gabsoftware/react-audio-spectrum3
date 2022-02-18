@@ -4,7 +4,7 @@
 
 ## Getting Started
 
-```
+```JSX
 <audio id="audio-element"
   src="path/to/song.mp3"
   controls
@@ -30,7 +30,7 @@
 
 ### you can also pass the audio element itself to the component
 
-```
+```JSX
 this.audioEle = new Audio('path/to/your/song.mp3)
 <AudioSpectrum
   id="audio-canvas"
