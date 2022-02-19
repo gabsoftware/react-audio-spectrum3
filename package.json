@@ -1,6 +1,6 @@
 {
   "name": "react-av",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A React component for displaying an audio spectrum in an HTML canvas",
   "main": "./lib/AudioSpectrum.js",
   "types": "./lib/AudioSpectrum.d.ts",
