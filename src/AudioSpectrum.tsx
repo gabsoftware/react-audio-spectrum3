@@ -11,14 +11,21 @@ export type AudioSpectrumProps = {
   height: number;
   audioId?: string;
   audioEle?: HTMLAudioElement;
-  capColor: React.CSSProperties["color"];
-  capHeight: number;
+  capColor?: React.CSSProperties["color"];
+  capHeight?: number;
   meterWidth: number;
   meterCount: number;
   meterColor: string | MeterColor[];
   gap: number;
+  /**
+   * @IntRange 0 - 1
+   */
   smoothingTimeConstant?: number;
+  /**
+   * @IntRange 32 - 32768, must be power of 2
+   */
   fftSize?: number;
+  disableCap?: boolean;
 } & React.HTMLProps<HTMLCanvasElement>;
 
 type PlayStatus = "PAUSED" | "PLAYING";
@@ -38,6 +45,7 @@ const defaultProps = {
   gap: 10,
   smoothingTimeConstant: 0.8,
   fftSize: 2048,
+  disableCap: false,
 };
 
 function getRandomId(len: number) {
@@ -59,6 +67,7 @@ export default function AudioSpectrum({
   meterColor = defaultProps.meterColor,
   fftSize = defaultProps.fftSize,
   smoothingTimeConstant = defaultProps.smoothingTimeConstant,
+  disableCap = defaultProps.disableCap,
   gap = defaultProps.gap,
   id = getRandomId(50),
   audioEle: propsAudioEl,
@@ -95,6 +104,7 @@ export default function AudioSpectrum({
     const ctx = audioCanvas.current!.getContext("2d")!;
     const gradient = ctx.createLinearGradient(0, 0, 0, 300);
 
+    // Detection of color as array or color as string
     if (Array.isArray(meterColor)) {
       const stops = meterColor;
       stops.forEach((stop) => {
@@ -105,8 +115,31 @@ export default function AudioSpectrum({
     }
 
     const drawMeter = () => {
+      /*
+        frequencyBinCount is an unsigned integer half that of the fftSize.
+        This generally equates to the number of data values you will have 
+        to play with for the visualization.
+
+        DO NOT LOG THIS OR MANIPULATE. IT WILL CAUSE THE BROWSER TO CRASH
+      */
       const array = new Uint8Array(currentAnalyser.frequencyBinCount);
+      /*
+        getByteFrequencyData() copies the current frequency data into a 
+        Uint8Array (unsigned byte array) passed into it.
+        - Frequency data is integer scale of 0 to 255. - 
+        
+        Each item in the array represents the decibel value for a specific frequency. 
+        The frequencies are spread linearly from 0 to 1/2 of the sample rate.
+
+        For example, for 48000 sample rate, the last item of the array 
+        will represent the decibel value for 24000 Hz.
+
+        If the array has fewer elements than the `frequencyBinCount`, excess 
+        elements are dropped. If it has more elements than needed, 
+        excess elements are ignored.
+      */
       currentAnalyser.getByteFrequencyData(array);
+
       if (playStatus.current === "PAUSED") {
         array.fill(0);
         const allCapsReachBottom = !capYPositionArray.some((cap) => cap > 0);
@@ -128,11 +161,20 @@ export default function AudioSpectrum({
         if (value < capYPositionArray[i]) {
           const preValue = --capYPositionArray[i];
           const y = ((270 - preValue) * cHeight) / 270;
-          ctx.fillRect(i * (meterWidth + gap), y, meterWidth, capHeight);
+          if (disableCap) {
+            ctx.fillRect(i * (meterWidth + gap), y, meterWidth, 0);
+          } else {
+            ctx.fillRect(i * (meterWidth + gap), y, meterWidth, capHeight);
+          }
         } else {
           const y = ((270 - value) * cHeight) / 270;
-          ctx.fillRect(i * (meterWidth + gap), y, meterWidth, capHeight);
-          capYPositionArray[i] = value;
+          if (disableCap) {
+            ctx.fillRect(i * (meterWidth + gap), y, meterWidth, 0);
+            capYPositionArray[i] = 0;
+          } else {
+            ctx.fillRect(i * (meterWidth + gap), y, meterWidth, capHeight);
+            capYPositionArray[i] = value;
+          }
         }
         ctx.fillStyle = gradient;
         const y = ((270 - value) * cHeight) / 270 + capHeight;
