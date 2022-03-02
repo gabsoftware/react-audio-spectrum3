@@ -96,6 +96,7 @@ export default function AudioSpectrum({
           gradient.addColorStop(stop.stop, stop.color as string);
         });
       } else if (typeof meterColor === "string") {
+        gradient.addColorStop(0, meterColor);
       }
 
       const drawMeter = () => {
