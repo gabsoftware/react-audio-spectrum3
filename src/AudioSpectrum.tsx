@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 type MeterColor = {
   stop: number;
@@ -74,17 +74,17 @@ export default function AudioSpectrum({
   audioId,
   ...restProps
 }: AudioSpectrumProps) {
-  const animationId = React.useRef<number | null>(null);
   const canvasId = id;
-  const audioContext = React.useRef<AudioContext | null>(null);
-  const audioCanvas = React.useRef<HTMLCanvasElement | null>(null);
-  const playStatus = React.useRef<PlayStatus | null>(null);
-  const mediaEleSource = React.useRef<MediaElementAudioSourceNode | null>(null);
-  const analyser = React.useRef<AnalyserNode | null>(null);
-  const audioEle = React.useRef<HTMLAudioElement | null>(null);
-  const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const analyser = useRef<AnalyserNode | null>(null);
+  const audioEle = useRef<HTMLAudioElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const playStatus = useRef<PlayStatus | null>(null);
+  const animationId = useRef<number | null>(null);
+  const audioCanvas = useRef<HTMLCanvasElement | null>(null);
+  const audioContext = useRef<AudioContext | null>(null);
+  const mediaEleSource = useRef<MediaElementAudioSourceNode | null>(null);
 
-  const prepareElements = React.useCallback(() => {
+  const prepareElements = useCallback(() => {
     if (!audioId && !propsAudioEl) {
       console.error("Target audio not found.");
       return;
@@ -225,7 +225,7 @@ export default function AudioSpectrum({
     return analyser;
   };
 
-  const prepareAPIs = React.useCallback(() => {
+  const prepareAPIs = useCallback(() => {
     try {
       audioContext.current = new window.AudioContext();
     } catch (e) {
@@ -235,7 +235,7 @@ export default function AudioSpectrum({
   }, []);
 
   // Retain old value to compare
-  const [meterColorState, setMeterColorState] = React.useState(meterColor);
+  const [meterColorState, setMeterColorState] = useState(meterColor);
 
   const initAudioEvents = (trigger?: "color") => {
     // Hyper-hacky way to reinit
@@ -256,7 +256,7 @@ export default function AudioSpectrum({
     }
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     // State keeps track of old color, won't update from original color unless user changes.
     if (meterColor !== meterColorState) {
       setMeterColorState(meterColor);

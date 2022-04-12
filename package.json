@@ -1,6 +1,6 @@
 {
   "name": "react-av",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A React component for displaying an audio spectrum in an HTML canvas",
   "main": "./lib/AudioSpectrum.js",
   "types": "./lib/AudioSpectrum.d.ts",
@@ -18,8 +18,8 @@
     "player"
   ],
   "peerDependencies": {
-    "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
   },
   "scripts": {
     "build": "tsc"
@@ -30,7 +30,7 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/react": "^17.0.39",
-    "typescript": "^3.9.5"
+    "@types/react": "^18.0.2",
+    "typescript": "^4.6.3"
   }
 }
