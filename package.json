@@ -1,12 +1,12 @@
 {
-  "name": "react-av",
-  "version": "0.2.0",
+  "name": "react-audio-spectrum3",
+  "version": "0.2.1",
   "description": "A React component for displaying an audio spectrum in an HTML canvas",
   "main": "./lib/AudioSpectrum.js",
   "types": "./lib/AudioSpectrum.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mytchmason/react-av.git"
+    "url": "https://github.com/gabsoftware/react-audio-spectrum3.git"
   },
   "keywords": [
     "audio",
@@ -18,19 +18,20 @@
     "player"
   ],
   "peerDependencies": {
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "scripts": {
     "build": "tsc"
   },
-  "author": "mytch <mytchmason@gmail.com>",
+  "author": "Gabriel Hautclocq <gabriel@gabsoftware.com>",
   "contributors": [
-    "mytch <mytchmason@gmail.com>"
+    "Gabriel Hautclocq <gabriel@gabsoftware.com>",
+    "Mytch Mason<mytchmason@gmail.com>"
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/react": "^18.0.2",
-    "typescript": "^4.6.3"
+    "@types/react": "^18.0.38",
+    "typescript": "^5.0.4"
   }
 }
