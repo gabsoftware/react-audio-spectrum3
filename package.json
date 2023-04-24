@@ -1,6 +1,6 @@
 {
   "name": "react-audio-spectrum3",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "A React component for displaying an audio spectrum in an HTML canvas",
   "main": "./lib/AudioSpectrum.js",
   "types": "./lib/AudioSpectrum.d.ts",
